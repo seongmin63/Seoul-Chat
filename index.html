@@ -181,8 +181,23 @@ body {
   flex-shrink: 0; font-size: 13px; font-weight: 700; color: #fff;
 }
 .dm-item-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.dm-item-info { flex: 1; min-width: 0; }
 .dm-item-name { font-size: 14px; font-weight: 600; }
+.dm-item-left { font-size: 11px; color: var(--c-muted); margin-top: 2px; }
+.dm-item-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.dm-action-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--c-border);
+  background: var(--c-input); display: flex; align-items: center; justify-content: center;
+  font-size: 15px; cursor: pointer; transition: background .15s;
+}
+.dm-action-btn:hover { background: var(--c-border); }
+.dm-action-btn.muted { color: var(--c-muted); }
 .dm-empty { text-align: center; color: var(--c-muted); font-size: 14px; padding: 3rem 1rem; }
+.chat-left-banner {
+  background: #f3f4f6; border-bottom: 1px solid var(--c-border);
+  text-align: center; font-size: 12px; color: var(--c-muted);
+  padding: 8px 14px; flex-shrink: 0;
+}
 
 /* ── 채팅 화면 ── */
 #chatScreen { flex: 1; overflow: hidden; }
@@ -755,15 +770,21 @@ function subscribeInbox() {
   const inboxRef = window._collection(window._db, 'users', profile.nickname, 'inbox');
   let firstSnap = true;
   unsubInbox = window._onSnapshot(inboxRef, snap => {
-    if (firstSnap) { firstSnap = false; return; } // 기존 항목 무시
+    if (firstSnap) { firstSnap = false; return; }
     snap.docChanges().forEach(ch => {
       if (ch.type !== 'added') return;
       const d = ch.doc.data();
-      // 이미 내가 보낸 DM이면 무시
+      // 상대방이 나간 경우
+      if (d.type === 'left') {
+        markPartnerLeft(d.dmId);
+        // DM 목록 화면이 열려 있으면 즉시 갱신
+        if (document.getElementById('dmListScreen').classList.contains('active')) showDmList();
+        return;
+      }
       if (d.partnerNick === profile.nickname) return;
       saveDmToList({ id: d.dmId, partnerNick: d.partnerNick, partnerAvatar: d.partnerAvatar, partnerGender: d.partnerGender });
-      // 현재 그 DM방에 있으면 토스트 생략
       if (currentRoom?.id === d.dmId) return;
+      if (isMuted(d.dmId)) return; // 알림 끄기 상태면 토스트/뱃지 생략
       dmBadgeCount++;
       updateDmBadge();
       showDmToast(d.partnerNick, d.dmId);
@@ -788,7 +809,7 @@ function showDmToast(fromNick, dmId) {
   const toast = document.getElementById('dmToast');
   toast.classList.add('show');
   if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 5000);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
 function goToDmFromToast() {
@@ -841,6 +862,16 @@ function enterChat(roomId, title, sub, badge, backTarget, isDM = false) {
   document.getElementById('roomBadge').textContent = badge;
   document.getElementById('onlineCount').textContent = '';
   document.getElementById('messages').innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+  // 상대방 나감 배너
+  const existingBanner = document.getElementById('chatLeftBanner');
+  if (existingBanner) existingBanner.remove();
+  if (isDM && getLeftDms().includes(roomId)) {
+    const banner = document.createElement('div');
+    banner.id = 'chatLeftBanner';
+    banner.className = 'chat-left-banner';
+    banner.textContent = '상대방이 채팅방을 나갔습니다';
+    document.getElementById('chatScreen').insertBefore(banner, document.getElementById('messages'));
+  }
   showScreen('chatScreen');
 
   const connect = () => {
@@ -886,9 +917,42 @@ function saveDmToList(dm) {
   list.unshift(dm);
   localStorage.setItem('dnTalk_dms', JSON.stringify(list));
 }
+function getLeftDms() { return JSON.parse(localStorage.getItem('dnTalk_left') || '[]'); }
+function markPartnerLeft(dmId) {
+  const left = getLeftDms();
+  if (!left.includes(dmId)) { left.push(dmId); localStorage.setItem('dnTalk_left', JSON.stringify(left)); }
+}
+function getMutedDms() { return JSON.parse(localStorage.getItem('dnTalk_mute') || '[]'); }
+function isMuted(dmId) { return getMutedDms().includes(dmId); }
+function toggleMute(dmId, e) {
+  e.stopPropagation();
+  const muted = getMutedDms();
+  const idx = muted.indexOf(dmId);
+  if (idx === -1) muted.push(dmId); else muted.splice(idx, 1);
+  localStorage.setItem('dnTalk_mute', JSON.stringify(muted));
+  showDmList();
+}
+function leaveDm(dmId, partnerNick, e) {
+  e.stopPropagation();
+  if (!confirm(partnerNick + '님과의 채팅방을 나가시겠어요?')) return;
+  // 상대방에게 나갔음 알림
+  if (window._firebaseReady) {
+    const inboxRef = window._doc(window._db, 'users', partnerNick, 'inbox', dmId + '_left');
+    window._setDoc(inboxRef, { dmId, type: 'left', from: profile.nickname, ts: new Date() }).catch(() => {});
+  }
+  // 내 목록에서 제거
+  const list = getDmList().filter(d => d.id !== dmId);
+  localStorage.setItem('dnTalk_dms', JSON.stringify(list));
+  // mute 목록에서도 제거
+  const muted = getMutedDms().filter(id => id !== dmId);
+  localStorage.setItem('dnTalk_mute', JSON.stringify(muted));
+  showDmList();
+}
+
 function showDmList() {
   dmBadgeCount = 0; updateDmBadge();
   const list = getDmList();
+  const leftDms = getLeftDms();
   const el = document.getElementById('dmList');
   if (list.length === 0) {
     el.innerHTML = '<div class="dm-empty">아직 1:1 채팅이 없어요.<br>채팅방에서 상대방 프로필을 눌러 시작해보세요!</div>';
@@ -898,11 +962,24 @@ function showDmList() {
       const item = document.createElement('div');
       item.className = 'dm-item';
       item.onclick = () => enterChat(dm.id, dm.partnerNick, '1:1 채팅', '', 'dmListScreen', true);
+      const isLeft = leftDms.includes(dm.id);
+      const muted = isMuted(dm.id);
       let avatarHtml = dm.partnerAvatar
         ? `<img src="${dm.partnerAvatar}" alt="">`
         : `<span style="background:${avatarColor(dm.partnerNick||'')};width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;border-radius:50%">${(dm.partnerNick||'?').slice(-2)}</span>`;
       const genderIcon = { '남':'👦', '여':'👧', '🦄':'🦄' }[dm.partnerGender] || '';
-      item.innerHTML = `<div class="dm-item-avatar">${avatarHtml}</div><div class="dm-item-name">${esc(dm.partnerNick)} ${genderIcon}</div>`;
+      const leftText = isLeft ? `<div class="dm-item-left">상대방이 채팅방을 나갔습니다</div>` : '';
+      const muteIcon = muted ? '🔕' : '🔔';
+      item.innerHTML = `
+        <div class="dm-item-avatar">${avatarHtml}</div>
+        <div class="dm-item-info">
+          <div class="dm-item-name">${esc(dm.partnerNick)} ${genderIcon}</div>
+          ${leftText}
+        </div>
+        <div class="dm-item-actions">
+          <button class="dm-action-btn${muted?' muted':''}" title="${muted?'알림 켜기':'알림 끄기'}" onclick="toggleMute('${dm.id}',event)">${muteIcon}</button>
+          <button class="dm-action-btn" title="채팅방 나가기" onclick="leaveDm('${dm.id}','${esc(dm.partnerNick)}',event)">🚪</button>
+        </div>`;
       el.appendChild(item);
     });
   }
