@@ -775,8 +775,9 @@ function enterGroupChat(type) {
 function enterDM(partnerNick, partnerAvatarData, partnerGender) {
   closePartnerModal();
   const dmId = 'dm_' + [profile.nickname, partnerNick].sort().join('__');
+  // 새로 시작하는 DM이므로 이전 "나갔습니다" 마커 제거
+  clearLeftMark(dmId);
   saveDmToList({ id: dmId, partnerNick, partnerAvatar: partnerAvatarData, partnerGender });
-  // 상대방 수신함에 알림 기록
   if (window._firebaseReady) {
     const inboxRef = window._doc(window._db, 'users', partnerNick, 'inbox', dmId);
     window._setDoc(inboxRef, {
@@ -830,6 +831,8 @@ function subscribeInbox() {
         return;
       }
       if (d.partnerNick === profile.nickname) return;
+      // 상대방이 새로 DM을 걸어오면 이전 "나갔습니다" 마커 제거
+      clearLeftMark(d.dmId);
       saveDmToList({ id: d.dmId, partnerNick: d.partnerNick, partnerAvatar: d.partnerAvatar, partnerGender: d.partnerGender });
       subscribeDmRooms();
     });
@@ -1034,6 +1037,15 @@ function getLeftDms() { return JSON.parse(localStorage.getItem('dnTalk_left') ||
 function markPartnerLeft(dmId) {
   const left = getLeftDms();
   if (!left.includes(dmId)) { left.push(dmId); localStorage.setItem('dnTalk_left', JSON.stringify(left)); }
+}
+function clearLeftMark(dmId) {
+  const left = getLeftDms().filter(id => id !== dmId);
+  localStorage.setItem('dnTalk_left', JSON.stringify(left));
+  // 채팅방 배너도 즉시 제거
+  if (currentRoom?.id === dmId) {
+    const banner = document.getElementById('chatLeftBanner');
+    if (banner) banner.remove();
+  }
 }
 function getMutedDms() { return JSON.parse(localStorage.getItem('dnTalk_mute') || '[]'); }
 function isMuted(dmId) { return getMutedDms().includes(dmId); }
