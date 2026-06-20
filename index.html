@@ -907,12 +907,14 @@ function subscribeDmRooms() {
   list.forEach(dm => {
     if (dmRoomSubs[dm.id]) return; // 이미 구독 중
     const colRef = window._collection(window._db, 'rooms', dm.id, 'messages');
-    const q = window._query(colRef, window._orderBy('ts'), window._limit(50));
+    // 내 리셋 시점과 상대 리셋 시점 중 더 늦은 것을 cutoff로 사용
+    const dmCutoff = new Date(Math.max(profileResetTime.getTime(), dm.startFrom || 0));
+    const q = window._query(colRef, window._where('ts', '>=', dmCutoff), window._orderBy('ts'), window._limit(50));
     let initialized = false;
     dmRoomSubs[dm.id] = window._onSnapshot(q, snap => {
       if (!initialized) {
         initialized = true;
-        // 기존 메시지 중 마지막 것으로 미리보기 초기화
+        // cutoff 이후 메시지 중 마지막 것으로 미리보기 초기화
         const docs = snap.docs.filter(d => d.data().text && d.data().type !== 'system');
         if (docs.length > 0) {
           const last = docs[docs.length - 1].data();
@@ -1051,8 +1053,14 @@ function enterChat(roomId, title, sub, badge, backTarget, isDM = false) {
       }
       snap.docChanges().forEach(ch => {
         if (ch.type === 'added' && !renderedIds.has(ch.doc.id)) {
+          const msgData = ch.doc.data();
+          // 클라이언트 사이드 이중 필터 (Firestore where 절 보완)
+          if (isDM) {
+            const msgTs = msgData.ts?.toDate?.() || new Date(0);
+            if (msgTs < cutoff) { renderedIds.add(ch.doc.id); return; }
+          }
           renderedIds.add(ch.doc.id);
-          appendMsg(ch.doc.data());
+          appendMsg(msgData);
           el.scrollTop = el.scrollHeight;
         }
       });
