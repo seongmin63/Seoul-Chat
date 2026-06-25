@@ -201,6 +201,12 @@ body {
   padding: 8px 14px; flex-shrink: 0; font-weight: 500;
 }
 
+/* ── 광고 배너 ── */
+#adBanner { flex-shrink: 0; height: 110px; overflow: hidden; position: relative; background: #fff0f3; }
+#adBanner a { display: block; height: 100%; }
+#adTrack { display: flex; height: 100%; transition: transform .6s ease; }
+#adTrack img { flex-shrink: 0; width: 100%; height: 110px; object-fit: cover; object-position: center; }
+
 /* ── 채팅 화면 ── */
 #chatScreen { flex: 1; overflow: hidden; }
 #chatScreen.active { display: flex; flex-direction: column; }
@@ -412,6 +418,16 @@ body {
     </div>
     <div class="room-badge" id="roomBadge"></div>
     <div id="onlineCount" style="font-size:12px;color:var(--c-muted);white-space:nowrap;margin-left:4px"></div>
+  </div>
+  <div id="adBanner" style="display:none">
+    <a href="https://oeeo.store/" target="_blank" rel="noopener" id="adLink">
+      <div id="adTrack">
+        <img src="oeeo_1.jpg" alt="oeeo strawberry">
+        <img src="oeeo_2.jpg" alt="oeeo strawberry">
+        <img src="oeeo_3.jpg" alt="oeeo strawberry">
+        <img src="oeeo_4.jpg" alt="oeeo strawberry">
+      </div>
+    </a>
   </div>
   <div id="messages"><div class="loading-dots"><span></span><span></span><span></span></div></div>
   <div id="inputArea">
@@ -1020,11 +1036,15 @@ function enterChat(roomId, title, sub, badge, backTarget, isDM = false) {
   const existingBanner = document.getElementById('chatLeftBanner');
   if (existingBanner) existingBanner.remove();
   showScreen('chatScreen');
-  if (isDM && getLeftDms().includes(roomId)) showLeftBanner();
+  if (isDM) { stopAdBanner(); if (getLeftDms().includes(roomId)) showLeftBanner(); }
+  else startAdBanner();
 
   const connect = () => {
     const colRef = window._collection(window._db, 'rooms', roomId, 'messages');
-    const q = window._query(colRef, window._where('ts', '>=', profileResetTime), window._orderBy('ts'), window._limit(100));
+    const cutoff = isDM
+      ? profileResetTime
+      : new Date(Math.max(profileResetTime.getTime(), Date.now() - 60 * 60 * 1000));
+    const q = window._query(colRef, window._where('ts', '>=', cutoff), window._orderBy('ts'), window._limit(100));
 
     const renderedIds = new Set();
     let initialSnapDone = false;
@@ -1238,6 +1258,29 @@ function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>');
 }
 
+// ── 광고 배너 캐러셀 ─────────────────────────────────────
+let adTimer = null;
+let adIndex = 0;
+const AD_COUNT = 4;
+
+function startAdBanner() {
+  const banner = document.getElementById('adBanner');
+  banner.style.display = '';
+  adIndex = 0;
+  document.getElementById('adTrack').style.transform = 'translateX(0)';
+  clearInterval(adTimer);
+  adTimer = setInterval(() => {
+    adIndex = (adIndex + 1) % AD_COUNT;
+    document.getElementById('adTrack').style.transform = `translateX(-${adIndex * 100}%)`;
+  }, 3000);
+}
+
+function stopAdBanner() {
+  clearInterval(adTimer);
+  adTimer = null;
+  document.getElementById('adBanner').style.display = 'none';
+}
+
 // ── 메시지 전송 ──────────────────────────────────────────
 function sendMsg() {
   if (!currentRoom || !window._firebaseReady) return;
@@ -1258,7 +1301,9 @@ function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(e
 // ── 뒤로가기 ─────────────────────────────────────────────
 function goBack() {
   leavePresence();
+  stopAdBanner();
   if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+  if (currentRoom?.isDM) { clearDmUnread(currentRoom.id); updateDmBadge(); }
   currentRoom = null;
   lastDate = '';
   if (chatBackTarget === 'dmListScreen') showDmList();
