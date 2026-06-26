@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>서울챗</title>
+<title>동네톡</title>
 
 <script type="module">
   import { initializeFirestore, collection, addDoc, setDoc, deleteDoc, getDocs, getDoc, doc, query, orderBy, onSnapshot, limit, where, enableNetwork, disableNetwork }
@@ -206,6 +206,12 @@ body {
 #adBanner a { display: block; height: 80px; }
 #adTrack { display: flex; height: 80px; transition: transform .6s ease; }
 #adTrack img { flex: 0 0 auto; height: 80px; object-fit: cover; object-position: center; }
+@media (min-width: 600px) {
+  #adBanner { height: auto; }
+  #adBanner a { height: auto; }
+  #adTrack { height: auto; }
+  #adTrack img { height: auto; max-height: 160px; object-fit: contain; background: #fff0f3; }
+}
 
 /* ── 채팅 화면 ── */
 #chatScreen { flex: 1; overflow: hidden; }
@@ -326,7 +332,7 @@ body {
 <div id="profileScreen" class="screen active">
   <div class="profile-card">
     <div>
-      <h2>서울챗 시작하기</h2>
+      <h2>동네톡 시작하기</h2>
       <p class="desc" style="margin-top:4px">내 동네 이웃들과 자유롭게 대화해요.<br>프로필을 설정하면 위치 기반으로 자동 입장돼요.</p>
     </div>
     <div class="avatar-section">
@@ -365,7 +371,7 @@ body {
 <div id="menuScreen" class="screen">
   <div class="menu-header">
     <div class="menu-header-left">
-      <div class="logo">서울챗</div>
+      <div class="logo">동네톡</div>
       <div class="menu-location" id="menuLocation"></div>
     </div>
     <div class="my-avatar-btn" id="myAvatarBtn" onclick="openMyProfile()"></div>
@@ -997,15 +1003,25 @@ function joinPresence(roomId) {
   presenceDocRef = window._doc(window._db, 'rooms', roomId, 'presence', uid);
   window._setDoc(presenceDocRef, { nick: profile.nickname, ts: new Date() });
 
+  if (window._presenceHeartbeat) clearInterval(window._presenceHeartbeat);
+  window._presenceHeartbeat = setInterval(() => {
+    if (presenceDocRef) window._setDoc(presenceDocRef, { nick: profile.nickname, ts: new Date() }).catch(() => {});
+  }, 60000);
+
   const presColRef = window._collection(window._db, 'rooms', roomId, 'presence');
   unsubPresence = window._onSnapshot(presColRef, snap => {
-    const count = snap.size;
+    const cutoff = new Date(Date.now() - 5 * 60 * 1000);
+    const count = snap.docs.filter(d => {
+      const ts = d.data().ts;
+      return ts && (ts.toDate ? ts.toDate() : new Date(ts)) > cutoff;
+    }).length;
     const el = document.getElementById('onlineCount');
     if (el) el.textContent = '👥 ' + count + '명';
   });
 }
 
 function leavePresence() {
+  if (window._presenceHeartbeat) { clearInterval(window._presenceHeartbeat); window._presenceHeartbeat = null; }
   if (unsubPresence) { unsubPresence(); unsubPresence = null; }
   if (presenceDocRef) {
     window._deleteDoc(presenceDocRef).catch(() => {});
