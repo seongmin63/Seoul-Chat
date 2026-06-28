@@ -262,7 +262,7 @@ body {
 }
 #msgInput {
   flex: 1; resize: none; border: 1px solid #b8d9c5; border-radius: var(--radius-md);
-  padding: 9px 12px; font-size: 14px; font-family: inherit;
+  padding: 9px 12px; font-size: 16px; font-family: inherit;
   background: #fff; color: var(--c-text); outline: none; max-height: 100px; line-height: 1.5;
 }
 #msgInput:focus { border-color: var(--blue); }
@@ -945,7 +945,16 @@ const STRINGS = {
 let currentLang = localStorage.getItem('dnTalk_lang') || 'ko';
 
 function flagEmojiToCode(emoji) {
-  return [...emoji].map(c => String.fromCharCode(c.codePointAt(0) - 127397)).join('').toLowerCase();
+  try {
+    const code = [...emoji].map(c => String.fromCharCode(c.codePointAt(0) - 127397)).join('').toLowerCase();
+    return /^[a-z]{2}$/.test(code) ? code : null;
+  } catch(e) { return null; }
+}
+function natFlagImg(emoji, w = 18, h = 13) {
+  if (!emoji) return '';
+  const code = flagEmojiToCode(emoji);
+  if (!code) return '';
+  return `<img src="https://flagcdn.com/${w}x${h}/${code}.png" alt="" class="meta-flag" onerror="this.style.display='none'">`;
 }
 
 function buildNationalitySelect(lang) {
@@ -1519,12 +1528,12 @@ function enterGroupChat(type) {
 }
 
 // ── 1:1 채팅 입장 ────────────────────────────────────────
-async function enterDM(partnerNick, partnerAvatarData, partnerGender) {
+async function enterDM(partnerNick, partnerAvatarData, partnerGender, partnerNationality = '') {
   closePartnerModal();
   // 닉네임 기반 고정 방 ID — 같은 두 사람은 항상 같은 방 사용
   const dmId = 'dm_' + [profile.nickname, partnerNick].sort().join('__');
   const partnerLeft = getLeftDms().includes(dmId);
-  saveDmToList({ id: dmId, partnerNick, partnerAvatar: partnerAvatarData, partnerGender });
+  saveDmToList({ id: dmId, partnerNick, partnerAvatar: partnerAvatarData, partnerGender, partnerNationality });
   subscribeDmRooms();
   // 상대가 나가지 않은 경우에만 초대 알림 전송
   if (!partnerLeft && window._firebaseReady) {
@@ -1561,7 +1570,7 @@ function subscribeInbox() {
           const existing = getDmList().find(dm => dm.id === d.dmId);
           const wasLocked = getLeftDms().includes(d.dmId);
           if (!existing || wasLocked) {
-            saveDmToList({ id: d.dmId, partnerNick: d.partnerNick, partnerAvatar: d.partnerAvatar, partnerGender: d.partnerGender });
+            saveDmToList({ id: d.dmId, partnerNick: d.partnerNick, partnerAvatar: d.partnerAvatar, partnerGender: d.partnerGender, partnerNationality: d.partnerNationality || '' });
             if (wasLocked) clearLeftMark(d.dmId);
             changed = true;
           }
@@ -1583,7 +1592,7 @@ function subscribeInbox() {
       }
       if (d.partnerNick === profile.nickname) return;
       const wasLocked = getLeftDms().includes(d.dmId);
-      saveDmToList({ id: d.dmId, partnerNick: d.partnerNick, partnerAvatar: d.partnerAvatar, partnerGender: d.partnerGender });
+      saveDmToList({ id: d.dmId, partnerNick: d.partnerNick, partnerAvatar: d.partnerAvatar, partnerGender: d.partnerGender, partnerNationality: d.partnerNationality || '' });
       if (wasLocked) clearLeftMark(d.dmId);
       subscribeDmRooms();
     });
@@ -1895,7 +1904,7 @@ function showDmList() {
       item.innerHTML = `
         <div class="dm-item-avatar">${avatarHtml}</div>
         <div class="dm-item-info">
-          <div class="dm-item-name">${esc(dm.partnerNick)} ${genderIcon}${unreadBadge}</div>
+          <div class="dm-item-name">${natFlagImg(dm.partnerNationality, 18, 13)}${esc(dm.partnerNick)} ${genderIcon}${unreadBadge}</div>
           ${subText}
         </div>
         <div class="dm-item-actions">
@@ -1935,12 +1944,12 @@ function appendMsg(data) {
     ? `<img src="${data.avatar}" alt="">`
     : (() => { const color = avatarColor(data.sender||''); const initials = (data.sender||'?').slice(-2); return `<span style="background:${color};width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;border-radius:50%">${initials}</span>`; })();
   const avatarClick = (!isMine && !currentRoom?.isDM)
-    ? `style="cursor:pointer" onclick="openPartnerModal('${esc(data.sender||'')}','${esc(data.gender||'')}','${esc(data.avatar||'')}',this.innerHTML)"`
+    ? `style="cursor:pointer" onclick="openPartnerModal('${esc(data.sender||'')}','${esc(data.gender||'')}','${esc(data.avatar||'')}',this.innerHTML,'${esc(data.nationality||'')}')"`
     : '';
   row.innerHTML = `
     <div class="avatar-sm" ${avatarClick}>${avatarHtml}</div>
     <div class="bubble-wrap">
-      <div class="bubble-meta">${data.nationality ? `<img class="meta-flag" src="https://flagcdn.com/18x13/${flagEmojiToCode(data.nationality)}.png" alt="${data.nationality}">` : ''}<span class="meta-name">${esc(data.sender||'')}</span><span class="meta-gender">${genderLabel}</span></div>
+      <div class="bubble-meta">${natFlagImg(data.nationality)}<span class="meta-name">${esc(data.sender||'')}</span><span class="meta-gender">${genderLabel}</span></div>
       <div class="bubble">${esc(data.text)}</div>
       <div class="bubble-time">${timeStr}</div>
     </div>`;
@@ -1948,11 +1957,11 @@ function appendMsg(data) {
 }
 
 // ── 상대방 프로필 모달 ────────────────────────────────────
-function openPartnerModal(sender, gender, avatar, avatarHtml) {
+function openPartnerModal(sender, gender, avatar, avatarHtml, nationality = '') {
   const genderIcon = GENDER_SVG_LG[gender] || '';
-  document.getElementById('partnerName').innerHTML = esc(sender) + (genderIcon ? ' ' + genderIcon : '');
+  document.getElementById('partnerName').innerHTML = natFlagImg(nationality, 22, 16) + esc(sender) + (genderIcon ? ' ' + genderIcon : '');
   document.getElementById('partnerAvatar').innerHTML = avatarHtml;
-  modalTarget = { nick: sender, avatar, gender };
+  modalTarget = { nick: sender, avatar, gender, nationality };
   document.getElementById('partnerModal').classList.add('open');
 }
 function closePartnerModal(e) {
@@ -1961,7 +1970,7 @@ function closePartnerModal(e) {
 }
 function startDM() {
   if (!modalTarget) return;
-  enterDM(modalTarget.nick, modalTarget.avatar, modalTarget.gender);
+  enterDM(modalTarget.nick, modalTarget.avatar, modalTarget.gender, modalTarget.nationality || '');
 }
 
 function esc(s) {
