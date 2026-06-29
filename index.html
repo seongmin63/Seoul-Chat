@@ -326,6 +326,10 @@ body {
   background: var(--c-input); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .modal-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.my-avatar-edit-wrap { position: relative; cursor: pointer; border-radius: 50%; display: inline-block; }
+.avatar-edit-overlay { position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,0.38); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .15s; pointer-events: none; }
+.my-avatar-edit-wrap:hover .avatar-edit-overlay,
+.my-avatar-edit-wrap:active .avatar-edit-overlay { opacity: 1; }
 .modal-name { font-size: 17px; font-weight: 700; }
 .btn-modal {
   width: 100%; padding: 12px; background: var(--blue); color: #fff;
@@ -594,7 +598,11 @@ body {
 <div class="modal-overlay" id="myProfileModal" onclick="closeMyProfile(event)">
   <div class="modal-sheet" onclick="event.stopPropagation()">
     <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:12px">
-      <div class="modal-avatar" id="myViewAvatar"></div>
+      <div class="my-avatar-edit-wrap" onclick="document.getElementById('avatarChangeInput').click()" title="사진 변경">
+        <div class="modal-avatar" id="myViewAvatar"></div>
+        <div class="avatar-edit-overlay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      </div>
+      <input type="file" id="avatarChangeInput" accept="image/*" style="display:none">
       <div class="modal-name" id="myViewName"></div>
       <button class="btn-modal" onclick="confirmDeleteProfile()" style="background:#e74c3c" data-i18n="delete_profile">프로필 삭제</button>
       <button class="btn-modal secondary" onclick="closeMyProfile()" data-i18n="close_btn">닫기</button>
@@ -1158,6 +1166,39 @@ document.addEventListener('visibilitychange', async () => {
 // ── 아바타 업로드 (프로필 설정) ──────────────────────────
 document.getElementById('avatarInput').addEventListener('change', e => {
   compressAndSetAvatar(e.target.files[0]);
+});
+
+document.getElementById('avatarChangeInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file || !profile) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const tempImg = new Image();
+    tempImg.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 80; canvas.height = 80;
+      const ctx = canvas.getContext('2d');
+      const size = Math.min(tempImg.width, tempImg.height);
+      ctx.drawImage(tempImg, (tempImg.width-size)/2, (tempImg.height-size)/2, size, size, 0, 0, 80, 80);
+      const compressed = canvas.toDataURL('image/jpeg', 0.7);
+
+      profile.avatar = compressed;
+      localStorage.setItem('dnTalk_profile', JSON.stringify(profile));
+      localStorage.setItem('dnTalk_avatar', compressed);
+
+      const avatarEl = document.getElementById('myViewAvatar');
+      avatarEl.innerHTML = `<img src="${compressed}" alt="">`;
+
+      renderMyAvatarBtn();
+
+      if (window._firebaseReady) {
+        window._setDoc(window._doc(window._db, 'users', profile.nickname), { avatar: compressed }, { merge: true }).catch(() => {});
+      }
+    };
+    tempImg.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
 });
 
 function compressAndSetAvatar(file) {
