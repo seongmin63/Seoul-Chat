@@ -441,6 +441,20 @@ body {
 .nat-item:hover { background: var(--c-input); }
 .nat-item.selected { background: var(--blue-l); font-weight: 600; }
 .nat-item img { width: 28px; height: 21px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
+/* ── 서비스 국가 목록 ── */
+#introCountries {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  z-index: 3; text-align: right; pointer-events: none;
+}
+@media (max-width: 520px) {
+  #introCountries {
+    right: auto; top: auto; transform: translateX(-50%);
+    bottom: 20px; left: 50%; text-align: center;
+  }
+  #introCountries .ic-list { align-items: center; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px 14px; }
+  #introCountries .ic-soon { width: 100%; text-align: center; margin: 0; }
+  #introCountries .ic-item { flex-direction: row-reverse; }
+}
 /* ── About 화면 ── */
 #aboutScreen { align-items: flex-start; overflow-y: auto; padding: 0; }
 .about-header { width: 100%; background: linear-gradient(150deg, #00704A 0%, #004f35 100%); padding: 52px 24px 32px; display: flex; flex-direction: column; align-items: center; position: relative; flex-shrink: 0; }
@@ -480,22 +494,22 @@ body {
 <!-- ⓪ 인트로 화면 -->
 <div id="introScreen" class="screen active">
   <canvas id="introCanvas"></canvas>
-  <div style="position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:3;text-align:right;pointer-events:none">
+  <div id="introCountries">
     <div style="font-size:10px;color:rgba(255,255,255,0.45);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Available in</div>
-    <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
-      <div style="display:flex;align-items:center;gap:6px">
+    <div class="ic-list" style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+      <div class="ic-item" style="display:flex;align-items:center;gap:6px">
         <span style="font-size:12px;color:rgba(255,255,255,0.75)">South Korea</span>
         <img src="https://flagcdn.com/kr.svg" alt="" style="width:20px;height:14px;object-fit:cover;border-radius:2px;opacity:0.8">
       </div>
-      <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+      <div class="ic-soon" style="font-size:10px;color:rgba(255,255,255,0.32);font-style:italic;margin:6px 0 2px">— coming soon —</div>
+      <div class="ic-item" style="display:flex;align-items:center;gap:6px">
         <span style="font-size:11px;color:rgba(255,255,255,0.35)">United States</span>
         <img src="https://flagcdn.com/us.svg" alt="" style="width:20px;height:14px;object-fit:cover;border-radius:2px;opacity:0.3">
       </div>
-      <div style="display:flex;align-items:center;gap:6px">
+      <div class="ic-item" style="display:flex;align-items:center;gap:6px">
         <span style="font-size:11px;color:rgba(255,255,255,0.35)">Japan</span>
         <img src="https://flagcdn.com/jp.svg" alt="" style="width:20px;height:14px;object-fit:cover;border-radius:2px;opacity:0.3">
       </div>
-      <div style="font-size:10px;color:rgba(255,255,255,0.28);margin-top:2px;font-style:italic">coming soon</div>
     </div>
   </div>
   <div class="intro-content">
@@ -764,7 +778,7 @@ body {
     <div style="font-size:10.5px;color:var(--c-muted);margin-top:3px" id="menuCopyright"></div>
     <!-- 개발 문의 폼 -->
     <div id="devInquiryForm" style="display:none;margin-top:10px">
-      <textarea id="devInquiryText" maxlength="500" style="width:100%;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;resize:none;height:90px;background:var(--c-input);color:var(--c-text);box-sizing:border-box" placeholder="개발을 원하는 서비스나 기능이 있다면 자유롭게 작성해주세요. 아이디어, 협업 제안 모두 환영합니다 :)"></textarea>
+      <textarea id="devInquiryText" maxlength="500" style="width:100%;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;resize:none;height:90px;background:var(--c-input);color:var(--c-text);box-sizing:border-box" placeholder="개발을 원하는 서비스나 기능이 있다면 자유롭게 작성해주세요. 아이디어, 협업 제안 모두 환영합니다."></textarea>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
         <span id="devInquiryCounter" style="font-size:11px;color:var(--c-muted)">0 / 500</span>
         <div style="display:flex;gap:8px">
@@ -854,7 +868,7 @@ body {
     <div class="room-badge" id="roomBadge"></div>
     <button id="onlineCount" onclick="toggleParticipantPanel()" style="font-size:12px;color:rgba(255,255,255,0.85);white-space:nowrap;margin-left:4px;background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:8px;transition:background 0.15s" onmouseenter="this.style.background='rgba(255,255,255,0.12)'" onmouseleave="this.style.background='none'"></button>
   </div>
-  <div id="participantPanel" style="display:none;position:absolute;top:56px;right:8px;width:200px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);z-index:200;overflow:hidden;max-height:300px;overflow-y:auto">
+  <div id="participantPanel" style="display:none;position:absolute;top:56px;right:8px;width:200px;background:var(--c-panel);border:1px solid var(--c-border);border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);z-index:200;overflow:hidden;max-height:300px;overflow-y:auto">
     <div id="participantList" style="padding:8px 0"></div>
   </div>
   <div id="adBanner" style="display:none">
@@ -996,6 +1010,7 @@ let currentRoom = null;
 let chatBackTarget = 'menuScreen';
 let currentRoomMembers = [];
 let currentOnlineCount = 0;
+let currentOnlineNicks = new Set();
 let unsubscribe = null;
 let lastDate = '';
 let selectedGender = '';
@@ -1348,14 +1363,14 @@ const STRINGS = {
 // report + back + devlog + dev_opinion
 ['en','ko','zh','ja','es','fr','hi','ar'].forEach(l => {
   const x = {
-    en:{ report_btn:'Report', report_submit:'Submit Report', back:'Back', devlog_btn:'Dev Log →', devlog_title:'Dev Log', devlog_sub:'Village Chat Development Log', dev_opinion:'Feedback', dev_opinion_placeholder:"Have ideas or suggestions for improving Village Chat? We'd love to hear them :)", dev_opinion_submitted:'Thank you! Your feedback has been received.', contact_label:'Contact', submit:'Submit', privacy:'Privacy Policy', terms:'Terms of Service' },
-    ko:{ report_btn:'신고하기', report_submit:'신고 제출', back:'뒤로', devlog_btn:'개발 로그 →', devlog_title:'개발 로그', devlog_sub:'Village Chat Development Log', dev_opinion:'개발 의견', dev_opinion_placeholder:'Village Chat을 더 좋게 만들 아이디어나 의견이 있다면 자유롭게 적어주세요 :)', dev_opinion_submitted:'의견이 접수됐습니다. 감사합니다 :)', contact_label:'Contact', submit:'제출', privacy:'개인정보처리방침', terms:'이용약관' },
-    zh:{ report_btn:'举报', report_submit:'提交举报', back:'返回', devlog_btn:'开发日志 →', devlog_title:'开发日志', devlog_sub:'Village Chat Development Log', dev_opinion:'反馈意见', dev_opinion_placeholder:'有什么想法或建议可以让 Village Chat 更好？欢迎随时告诉我们 :)', dev_opinion_submitted:'感谢您的反馈！', contact_label:'联系方式', submit:'提交', privacy:'隐私政策', terms:'服务条款' },
-    ja:{ report_btn:'通報する', report_submit:'通報を送信', back:'戻る', devlog_btn:'開発ログ →', devlog_title:'開発ログ', devlog_sub:'Village Chat Development Log', dev_opinion:'ご意見', dev_opinion_placeholder:'Village Chat をもっと良くするアイデアやご意見があれば、ぜひ教えてください :)', dev_opinion_submitted:'フィードバックを受け付けました。ありがとうございます！', contact_label:'お問い合わせ', submit:'送信', privacy:'プライバシーポリシー', terms:'利用規約' },
-    es:{ report_btn:'Denunciar', report_submit:'Enviar denuncia', back:'Volver', devlog_btn:'Registro →', devlog_title:'Registro de desarrollo', devlog_sub:'Village Chat Development Log', dev_opinion:'Sugerencias', dev_opinion_placeholder:'¿Tienes ideas para mejorar Village Chat? ¡Nos encantaría escucharlas :)', dev_opinion_submitted:'¡Gracias por tu opinión!', contact_label:'Contacto', submit:'Enviar', privacy:'Política de privacidad', terms:'Términos de servicio' },
-    fr:{ report_btn:'Signaler', report_submit:'Envoyer le signalement', back:'Retour', devlog_btn:'Journal →', devlog_title:'Journal de développement', devlog_sub:'Village Chat Development Log', dev_opinion:'Suggestions', dev_opinion_placeholder:"Des idées pour améliorer Village Chat ? N'hésitez pas à nous les partager :)", dev_opinion_submitted:'Merci pour votre retour !', contact_label:'Contact', submit:'Envoyer', privacy:'Politique de confidentialité', terms:'Conditions d\'utilisation' },
-    hi:{ report_btn:'रिपोर्ट करें', report_submit:'रिपोर्ट सबमिट करें', back:'वापस', devlog_btn:'देव लॉग →', devlog_title:'विकास लॉग', devlog_sub:'Village Chat Development Log', dev_opinion:'सुझाव', dev_opinion_placeholder:'Village Chat को बेहतर बनाने के लिए आपके कोई विचार या सुझाव हैं? बताएं :)', dev_opinion_submitted:'आपका सुझाव मिल गया। धन्यवाद!', contact_label:'संपर्क', submit:'भेजें', privacy:'गोपनीयता नीति', terms:'सेवा की शर्तें' },
-    ar:{ report_btn:'إبلاغ', report_submit:'إرسال البلاغ', back:'رجوع', devlog_btn:'سجل التطوير →', devlog_title:'سجل التطوير', devlog_sub:'Village Chat Development Log', dev_opinion:'اقتراحات', dev_opinion_placeholder:'هل لديك أفكار أو اقتراحات لتحسين Village Chat؟ نسعد بسماعها :)', dev_opinion_submitted:'شكراً على ملاحظاتك!', contact_label:'تواصل', submit:'إرسال', privacy:'سياسة الخصوصية', terms:'شروط الخدمة' },
+    en:{ report_btn:'Report', report_submit:'Submit Report', back:'Back', devlog_btn:'Dev Log →', devlog_title:'Dev Log', devlog_sub:'Village Chat Development Log', dev_opinion:'Feedback', dev_opinion_placeholder:"Have ideas or suggestions for improving Village Chat? We'd love to hear them.", dev_opinion_submitted:'Thank you! Your feedback has been received.', contact_label:'Contact', submit:'Submit', privacy:'Privacy Policy', terms:'Terms of Service' },
+    ko:{ report_btn:'신고하기', report_submit:'신고 제출', back:'뒤로', devlog_btn:'개발 로그 →', devlog_title:'개발 로그', devlog_sub:'Village Chat Development Log', dev_opinion:'개발 의견', dev_opinion_placeholder:'Village Chat을 더 좋게 만들 아이디어나 의견이 있다면 자유롭게 적어주세요.', dev_opinion_submitted:'의견이 접수됐습니다. 감사합니다.', contact_label:'Contact', submit:'제출', privacy:'개인정보처리방침', terms:'이용약관' },
+    zh:{ report_btn:'举报', report_submit:'提交举报', back:'返回', devlog_btn:'开发日志 →', devlog_title:'开发日志', devlog_sub:'Village Chat Development Log', dev_opinion:'反馈意见', dev_opinion_placeholder:'有什么想法或建议可以让 Village Chat 更好？欢迎随时告诉我们。', dev_opinion_submitted:'感谢您的反馈！', contact_label:'联系方式', submit:'提交', privacy:'隐私政策', terms:'服务条款' },
+    ja:{ report_btn:'通報する', report_submit:'通報を送信', back:'戻る', devlog_btn:'開発ログ →', devlog_title:'開発ログ', devlog_sub:'Village Chat Development Log', dev_opinion:'ご意見', dev_opinion_placeholder:'Village Chat をもっと良くするアイデアやご意見があれば、ぜひ教えてください。', dev_opinion_submitted:'フィードバックを受け付けました。ありがとうございます！', contact_label:'お問い合わせ', submit:'送信', privacy:'プライバシーポリシー', terms:'利用規約' },
+    es:{ report_btn:'Denunciar', report_submit:'Enviar denuncia', back:'Volver', devlog_btn:'Registro →', devlog_title:'Registro de desarrollo', devlog_sub:'Village Chat Development Log', dev_opinion:'Sugerencias', dev_opinion_placeholder:'¿Tienes ideas para mejorar Village Chat? Nos encantaría escucharlas.', dev_opinion_submitted:'¡Gracias por tu opinión!', contact_label:'Contacto', submit:'Enviar', privacy:'Política de privacidad', terms:'Términos de servicio' },
+    fr:{ report_btn:'Signaler', report_submit:'Envoyer le signalement', back:'Retour', devlog_btn:'Journal →', devlog_title:'Journal de développement', devlog_sub:'Village Chat Development Log', dev_opinion:'Suggestions', dev_opinion_placeholder:"Des idées pour améliorer Village Chat ? N'hésitez pas à nous les partager.", dev_opinion_submitted:'Merci pour votre retour !', contact_label:'Contact', submit:'Envoyer', privacy:'Politique de confidentialité', terms:'Conditions d\'utilisation' },
+    hi:{ report_btn:'रिपोर्ट करें', report_submit:'रिपोर्ट सबमिट करें', back:'वापस', devlog_btn:'देव लॉग →', devlog_title:'विकास लॉग', devlog_sub:'Village Chat Development Log', dev_opinion:'सुझाव', dev_opinion_placeholder:'Village Chat को बेहतर बनाने के लिए आपके कोई विचार या सुझाव हैं? बताएं।', dev_opinion_submitted:'आपका सुझाव मिल गया। धन्यवाद!', contact_label:'संपर्क', submit:'भेजें', privacy:'गोपनीयता नीति', terms:'सेवा की शर्तें' },
+    ar:{ report_btn:'إبلاغ', report_submit:'إرسال البلاغ', back:'رجوع', devlog_btn:'سجل التطوير →', devlog_title:'سجل التطوير', devlog_sub:'Village Chat Development Log', dev_opinion:'اقتراحات', dev_opinion_placeholder:'هل لديك أفكار أو اقتراحات لتحسين Village Chat؟ نسعد بسماعها.', dev_opinion_submitted:'شكراً على ملاحظاتك!', contact_label:'تواصل', submit:'إرسال', privacy:'سياسة الخصوصية', terms:'شروط الخدمة' },
   }[l];
   if (STRINGS[l] && x) Object.assign(STRINGS[l], x);
 });
@@ -1761,7 +1776,7 @@ function toggleDevInquiry() {
   f.style.display = isHidden ? 'block' : 'none';
   if (isHidden) {
     const ta = document.getElementById('devInquiryText');
-    ta.placeholder = t('dev_opinion_placeholder') || 'Village Chat을 더 좋게 만들 아이디어나 의견이 있다면 자유롭게 적어주세요 :)';
+    ta.placeholder = t('dev_opinion_placeholder') || 'Village Chat을 더 좋게 만들 아이디어나 의견이 있다면 자유롭게 적어주세요.';
     ta.focus();
     ta.oninput = function() {
       document.getElementById('devInquiryCounter').textContent = this.value.length + ' / 500';
@@ -1816,7 +1831,7 @@ async function submitDevInquiry() {
   document.getElementById('devInquiryForm').style.display = 'none';
   document.getElementById('devInquiryText').value = '';
   document.getElementById('devInquiryCounter').textContent = '0 / 500';
-  alert(t('dev_opinion_submitted') || '의견이 접수됐습니다. 감사합니다 :)');
+  alert(t('dev_opinion_submitted') || '의견이 접수됐습니다. 감사합니다.');
 }
 
 function legalDateStr(lang, effectiveDate, updatedDate) {
@@ -3012,11 +3027,11 @@ function subscribeDmRooms() {
         const d = ch.doc.data();
         if (!d.text || d.type === 'system') return;
         saveDmLastMsg(dm.id, d.text, d.sender);
+        const isOwnDm = d.sender === profile.nickname;
+        const isActiveDm = currentRoom?.id === dm.id;
+        if (!isOwnDm && !isActiveDm) { addDmUnread(dm.id); updateDmBadge(); }
         if (document.getElementById('dmListScreen').classList.contains('active')) showDmList();
-        if (d.sender === profile.nickname) return;
-        if (currentRoom?.id === dm.id) return;
-        addDmUnread(dm.id);
-        updateDmBadge();
+        if (isOwnDm || isActiveDm) return;
         if (!isMuted(dm.id)) showDmToast(d.sender, dm.id, d.text);
       });
     });
@@ -3088,6 +3103,7 @@ function joinPresence(roomId) {
       if (ts && (ts.toDate ? ts.toDate() : new Date(ts)) > cutoff) onlineNicks.add(data.nick);
     });
     currentOnlineCount = onlineNicks.size;
+    currentOnlineNicks = onlineNicks;
     const el = document.getElementById('onlineCount');
     if (!el) return;
     const isInteractive = currentRoom?.isDM || currentRoom?.isCustom;
@@ -3150,7 +3166,9 @@ function enterChat(roomId, title, sub, badge, backTarget, isDM = false, isCustom
   lastDate = '';
   document.getElementById('roomTitle').innerHTML = title;
   document.getElementById('roomSub').textContent = sub;
-  document.getElementById('roomBadge').textContent = badge;
+  const badgeEl = document.getElementById('roomBadge');
+  badgeEl.textContent = badge;
+  badgeEl.style.display = badge ? '' : 'none';
   document.getElementById('onlineCount').textContent = '';
   if (isDM) { clearDmUnread(roomId); updateDmBadge(); }
   if (isCustom) { clearCustomUnread(roomId); updateCustomBadge(); }
@@ -3206,6 +3224,7 @@ function enterChat(roomId, title, sub, badge, backTarget, isDM = false, isCustom
           currentRoomMembers = snap.data().members;
           const el = document.getElementById('onlineCount');
           if (el) el.textContent = '👥 ' + currentOnlineCount + '/' + currentRoomMembers.length;
+          renderParticipantList(currentOnlineNicks);
         }
       }).catch(() => {});
     } else {
@@ -3463,11 +3482,11 @@ function subscribeCustomRooms() {
         const d = ch.doc.data();
         if (!d.text || d.type === 'system') return;
         saveCustomLastMsg(room.id, d.text, d.sender);
+        const isOwnCustom = d.sender === profile.nickname;
+        const isActiveCustom = currentRoom?.id === room.id;
+        if (!isOwnCustom && !isActiveCustom) { addCustomUnread(room.id); updateCustomBadge(); }
         if (document.getElementById('customRoomListScreen').classList.contains('active')) showCustomRoomList();
-        if (d.sender === profile.nickname) return;
-        if (currentRoom?.id === room.id) return;
-        addCustomUnread(room.id);
-        updateCustomBadge();
+        if (isOwnCustom || isActiveCustom) return;
         if (!isCustomMuted(room.id)) showDmToast(d.sender, room.id, d.text);
       });
     });
