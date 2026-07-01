@@ -504,7 +504,7 @@ body {
     </div>
     <button class="intro-btn" data-i18n="intro_btn" onclick="startIntro()">시작하기 →</button>
     <button class="intro-learn-btn" data-i18n="intro_learn" onclick="showScreen('aboutScreen')">서비스 소개 →</button>
-    <button class="intro-learn-btn" style="margin-top:6px;opacity:0.7;font-size:13px" onclick="showScreen('devlogScreen')">개발 로그 →</button>
+    <button class="intro-learn-btn" style="margin-top:6px;opacity:0.7;font-size:13px" data-i18n="devlog_btn" onclick="showScreen('devlogScreen')">개발 로그 →</button>
   </div>
 </div>
 
@@ -520,99 +520,10 @@ body {
       <path d="M50 67 L56 50 L50 56 L44 50 Z" fill="white" opacity=".35"/>
       <circle cx="38" cy="79" r="4" fill="white"/><circle cx="50" cy="79" r="4" fill="white"/><circle cx="62" cy="79" r="4" fill="white"/>
     </svg>
-    <div class="about-header-title">개발 로그</div>
-    <div class="about-header-sub" style="opacity:.7">Village Chat Development Log</div>
+    <div class="about-header-title" id="devlogTitle">개발 로그</div>
+    <div class="about-header-sub" id="devlogSub" style="opacity:.7">Village Chat Development Log</div>
   </div>
-  <div style="width:100%;max-width:480px;margin:0 auto;padding:8px 20px 0">
-
-    <!-- 2026.06 -->
-    <div style="margin-bottom:28px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="font-size:12px;font-weight:700;color:#fff;background:var(--blue);border-radius:20px;padding:3px 12px;white-space:nowrap">2026.06</div>
-        <div style="flex:1;height:1px;background:var(--c-border)"></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">보안 강화</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">Firebase 익명 로그인 도입 · App Check(reCAPTCHA v3) 적용 · Firestore 보안 규칙 강화 · DM 참여자 UID 기반 접근 제어</div>
-        </div>
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">신고 / 제재 시스템</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">상대방 프로필에서 신고 기능 추가 · 도배 감지 및 자동 임시 제재 · Firestore 신고 기록 저장</div>
-        </div>
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">광고 / 수익화</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">Google AdSense 연동 · ads.txt 등록 · HTML 기반 광고 배너 제작(oeeo · 광고 문의) · Cloudflare 이메일 라우팅 설정</div>
-        </div>
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">UX 개선</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">프로필 자기소개 편집 UI · 붐업/다운 하루 1회 중복 방지 · 상대방 프로필 이미지 품질 개선 · DM 목록 디자인 통일 · 프로필 설정 화면 뒤로가기 버튼</div>
-        </div>
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">법적 문서</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">개인정보처리방침 · 이용약관 8개 언어 지원 · 시행일 / 최종 수정일 언어별 표시</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2026.05 -->
-    <div style="margin-bottom:28px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="font-size:12px;font-weight:700;color:#fff;background:var(--blue);border-radius:20px;padding:3px 12px;white-space:nowrap">2026.05</div>
-        <div style="flex:1;height:1px;background:var(--c-border)"></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">시(市) 단위 채팅방</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">시 안에 사는 유저에게 시 단위 채팅방 추가(총 3단계: 시·구·동) · Nominatim zoom=10 fallback으로 시 정보 정확도 향상</div>
-        </div>
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">군(郡) 지역 지원</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">군·읍·면 체계 감지 · 농어촌 지역 채팅방 구조 분리(군/읍·면 2단계)</div>
-        </div>
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">같은 언어 채팅방</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">같은 언어를 사용하는 이웃끼리 구·동 단위 별도 채팅방 생성 · 한국어 선택 시 한국어 전용 방 미생성(중복 방지)</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2026.03 -->
-    <div style="margin-bottom:28px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="font-size:12px;font-weight:700;color:#fff;background:var(--blue);border-radius:20px;padding:3px 12px;white-space:nowrap">2026.03</div>
-        <div style="flex:1;height:1px;background:var(--c-border)"></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">1:1 채팅(DM)</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">그룹 채팅에서 상대 프로필 탭 → DM 시작 · 수신함 알림 · 읽지 않은 메시지 배지 · 상대방 나감 감지</div>
-        </div>
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">프로필 시스템</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">닉네임 · 성별 · 국적 · 아바타 사진 · 자기소개 · 붐업/다운 평가 · 프로필 삭제 기능</div>
-        </div>
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">다국어 지원</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">8개 언어 UI(한·영·중·일·스·불·힌·아) · 언어별 국기 선택 · 비속어 필터 다국어 적용</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2026.01 -->
-    <div style="margin-bottom:8px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="font-size:12px;font-weight:700;color:#fff;background:var(--blue);border-radius:20px;padding:3px 12px;white-space:nowrap">2026.01</div>
-        <div style="flex:1;height:1px;background:var(--c-border)"></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
-          <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">Village Chat 출시</div>
-          <div style="font-size:13px;color:var(--c-text);line-height:1.6">위치 기반 실시간 그룹 채팅 · Nominatim 역지오코딩으로 구·동 자동 감지 · Firebase Firestore 실시간 메시지 동기화 · GitHub Pages + Cloudflare 배포</div>
-        </div>
-      </div>
-    </div>
-
+  <div id="devlogCards" style="width:100%;max-width:480px;margin:0 auto;padding:8px 20px 0">
   </div>
   <footer class="about-footer" id="devlogFooter" style="width:100%;max-width:480px;margin:24px auto 0"></footer>
 </div>
@@ -641,7 +552,7 @@ body {
 <!-- Privacy Policy 화면 -->
 <div id="privacyScreen" class="screen">
   <div class="legal-header">
-    <button class="legal-back" onclick="showScreen('aboutScreen')">←</button>
+    <button class="legal-back" onclick="goBackFromLegal()">←</button>
     <div class="legal-header-title" id="privacyTitle">개인정보처리방침</div>
     <div class="legal-header-date" id="privacyDate"></div>
   </div>
@@ -651,7 +562,7 @@ body {
 <!-- Terms of Service 화면 -->
 <div id="termsScreen" class="screen">
   <div class="legal-header">
-    <button class="legal-back" onclick="showScreen('aboutScreen')">←</button>
+    <button class="legal-back" onclick="goBackFromLegal()">←</button>
     <div class="legal-header-title" id="termsTitle">이용약관</div>
     <div class="legal-header-date" id="termsDate"></div>
   </div>
@@ -808,12 +719,12 @@ body {
   <div id="menuFooter" style="padding:12px 16px 20px;border-top:1px solid var(--c-border);background:var(--c-bg)">
     <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:11.5px;color:var(--c-muted)">
       <span style="font-weight:600;color:var(--c-muted)">Village Chat</span>
-      <a href="#" onclick="event.preventDefault();showScreen('privacyScreen')" style="color:var(--blue);text-decoration:none" data-i18n="privacy">개인정보처리방침</a>
-      <a href="#" onclick="event.preventDefault();showScreen('termsScreen')" style="color:var(--blue);text-decoration:none" data-i18n="terms">이용약관</a>
-      <a href="mailto:contact@village-chat.com" style="color:var(--blue);text-decoration:none">contact@village-chat.com</a>
-      <button onclick="toggleDevInquiry()" style="background:var(--blue);color:#fff;border:none;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit" data-i18n="dev_inquiry">개발 문의</button>
+      <a href="#" onclick="event.preventDefault();legalBackTarget='menuScreen';showScreen('privacyScreen')" style="color:var(--blue);text-decoration:none" data-i18n="privacy">개인정보처리방침</a>
+      <a href="#" onclick="event.preventDefault();legalBackTarget='menuScreen';showScreen('termsScreen')" style="color:var(--blue);text-decoration:none" data-i18n="terms">이용약관</a>
+      <button id="devOpinionBtn" onclick="toggleDevInquiry()" style="background:var(--blue);color:#fff;border:none;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit" data-i18n="dev_opinion">개발 의견</button>
     </div>
-    <div style="font-size:10.5px;color:var(--c-muted);margin-top:5px" id="menuCopyright"></div>
+    <div style="font-size:11px;color:var(--c-muted);margin-top:5px" id="menuContactLine"></div>
+    <div style="font-size:10.5px;color:var(--c-muted);margin-top:3px" id="menuCopyright"></div>
     <!-- 개발 문의 폼 -->
     <div id="devInquiryForm" style="display:none;margin-top:10px">
       <textarea id="devInquiryText" maxlength="500" style="width:100%;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;resize:none;height:90px;background:var(--c-input);color:var(--c-text);box-sizing:border-box" placeholder="개발을 원하는 서비스나 기능이 있다면 자유롭게 작성해주세요. 아이디어, 협업 제안 모두 환영합니다 :)"></textarea>
@@ -1319,17 +1230,17 @@ const STRINGS = {
   if (STRINGS[l] && x) Object.assign(STRINGS[l], x);
 });
 
-// report + back
+// report + back + devlog + dev_opinion
 ['en','ko','zh','ja','es','fr','hi','ar'].forEach(l => {
   const x = {
-    en:{ report_btn:'Report', report_submit:'Submit Report', back:'Back' },
-    ko:{ report_btn:'신고하기', report_submit:'신고 제출', back:'뒤로' },
-    zh:{ report_btn:'举报', report_submit:'提交举报', back:'返回' },
-    ja:{ report_btn:'通報する', report_submit:'通報を送信', back:'戻る' },
-    es:{ report_btn:'Denunciar', report_submit:'Enviar denuncia', back:'Volver' },
-    fr:{ report_btn:'Signaler', report_submit:'Envoyer le signalement', back:'Retour' },
-    hi:{ report_btn:'रिपोर्ट करें', report_submit:'रिपोर्ट सबमिट करें', back:'वापस' },
-    ar:{ report_btn:'إبلاغ', report_submit:'إرسال البلاغ', back:'رجوع' },
+    en:{ report_btn:'Report', report_submit:'Submit Report', back:'Back', devlog_btn:'Dev Log →', devlog_title:'Dev Log', devlog_sub:'Village Chat Development Log', dev_opinion:'Feedback', dev_opinion_placeholder:"Have ideas or suggestions for improving Village Chat? We'd love to hear them :)", dev_opinion_submitted:'Thank you! Your feedback has been received.', contact_label:'Contact', submit:'Submit' },
+    ko:{ report_btn:'신고하기', report_submit:'신고 제출', back:'뒤로', devlog_btn:'개발 로그 →', devlog_title:'개발 로그', devlog_sub:'Village Chat Development Log', dev_opinion:'개발 의견', dev_opinion_placeholder:'Village Chat을 더 좋게 만들 아이디어나 의견이 있다면 자유롭게 적어주세요 :)', dev_opinion_submitted:'의견이 접수됐습니다. 감사합니다 :)', contact_label:'Contact', submit:'제출' },
+    zh:{ report_btn:'举报', report_submit:'提交举报', back:'返回', devlog_btn:'开发日志 →', devlog_title:'开发日志', devlog_sub:'Village Chat Development Log', dev_opinion:'反馈意见', dev_opinion_placeholder:'有什么想法或建议可以让 Village Chat 更好？欢迎随时告诉我们 :)', dev_opinion_submitted:'感谢您的反馈！', contact_label:'联系方式', submit:'提交' },
+    ja:{ report_btn:'通報する', report_submit:'通報を送信', back:'戻る', devlog_btn:'開発ログ →', devlog_title:'開発ログ', devlog_sub:'Village Chat Development Log', dev_opinion:'ご意見', dev_opinion_placeholder:'Village Chat をもっと良くするアイデアやご意見があれば、ぜひ教えてください :)', dev_opinion_submitted:'フィードバックを受け付けました。ありがとうございます！', contact_label:'お問い合わせ', submit:'送信' },
+    es:{ report_btn:'Denunciar', report_submit:'Enviar denuncia', back:'Volver', devlog_btn:'Registro →', devlog_title:'Registro de desarrollo', devlog_sub:'Village Chat Development Log', dev_opinion:'Sugerencias', dev_opinion_placeholder:'¿Tienes ideas para mejorar Village Chat? ¡Nos encantaría escucharlas :)', dev_opinion_submitted:'¡Gracias por tu opinión!', contact_label:'Contacto', submit:'Enviar' },
+    fr:{ report_btn:'Signaler', report_submit:'Envoyer le signalement', back:'Retour', devlog_btn:'Journal →', devlog_title:'Journal de développement', devlog_sub:'Village Chat Development Log', dev_opinion:'Suggestions', dev_opinion_placeholder:"Des idées pour améliorer Village Chat ? N'hésitez pas à nous les partager :)", dev_opinion_submitted:'Merci pour votre retour !', contact_label:'Contact', submit:'Envoyer' },
+    hi:{ report_btn:'रिपोर्ट करें', report_submit:'रिपोर्ट सबमिट करें', back:'वापस', devlog_btn:'देव लॉग →', devlog_title:'विकास लॉग', devlog_sub:'Village Chat Development Log', dev_opinion:'सुझाव', dev_opinion_placeholder:'Village Chat को बेहतर बनाने के लिए आपके कोई विचार या सुझाव हैं? बताएं :)', dev_opinion_submitted:'आपका सुझाव मिल गया। धन्यवाद!', contact_label:'संपर्क', submit:'भेजें' },
+    ar:{ report_btn:'إبلاغ', report_submit:'إرسال البلاغ', back:'رجوع', devlog_btn:'سجل التطوير →', devlog_title:'سجل التطوير', devlog_sub:'Village Chat Development Log', dev_opinion:'اقتراحات', dev_opinion_placeholder:'هل لديك أفكار أو اقتراحات لتحسين Village Chat؟ نسعد بسماعها :)', dev_opinion_submitted:'شكراً على ملاحظاتك!', contact_label:'تواصل', submit:'إرسال' },
   }[l];
   if (STRINGS[l] && x) Object.assign(STRINGS[l], x);
 });
@@ -1465,6 +1376,211 @@ const ABOUT_CONTENT = {
   },
 };
 
+const DEVLOG_LOG = {
+  en: [
+    { month: '2026.06', cards: [
+      { title: 'Security', desc: 'Anonymous login · App Check (reCAPTCHA v3) · Stricter Firestore rules · UID-based DM access control' },
+      { title: 'Report & Moderation', desc: 'Report button on user profiles · Spam detection & auto temporary ban · Report record storage' },
+      { title: 'Ads & Monetization', desc: 'Google AdSense integration · HTML-based ad banners (advertising contact)' },
+      { title: 'UX Improvements', desc: 'Profile bio editing UI · Daily vote deduplication · Better profile image quality · Unified DM list design' },
+      { title: 'Legal Documents', desc: 'Privacy Policy & Terms of Service in 8 languages · Language-specific effective/updated dates' },
+    ]},
+    { month: '2026.05', cards: [
+      { title: 'City-level Chat Room', desc: 'Added city-level room for users within the same city (3 tiers: city · district · neighborhood) · Improved location accuracy' },
+      { title: 'Rural Area Support', desc: 'Detection of county/town/village hierarchy · Separate room structure for rural areas (2 tiers: county · town)' },
+      { title: 'Same-language Room', desc: 'Separate chat rooms for neighbors sharing the same language · No Korean-only room created when Korean is selected (prevents duplication)' },
+    ]},
+    { month: '2026.03', cards: [
+      { title: 'Direct Messaging (DM)', desc: 'Start DM from group chat profile tap · Inbox notifications · Unread badge · Partner-left detection' },
+      { title: 'Profile System', desc: 'Nickname · gender · nationality · avatar photo · bio · boom-up/down ratings · profile deletion' },
+      { title: 'Multilingual Support', desc: '8-language UI (KO·EN·ZH·JA·ES·FR·HI·AR) · Flag-based language selector · Multilingual profanity filter' },
+    ]},
+    { month: '2026.01', cards: [
+      { title: 'Village Chat Launch', desc: 'Location-based real-time group chat · Auto district/neighborhood detection via Nominatim reverse geocoding · Real-time message sync' },
+    ]},
+  ],
+  ko: [
+    { month: '2026.06', cards: [
+      { title: '보안 강화', desc: '익명 로그인 도입 · App Check(reCAPTCHA v3) 적용 · 보안 규칙 강화 · DM 참여자 UID 기반 접근 제어' },
+      { title: '신고 / 제재 시스템', desc: '상대방 프로필에서 신고 기능 추가 · 도배 감지 및 자동 임시 제재 · 신고 기록 저장' },
+      { title: '광고 / 수익화', desc: 'Google AdSense 연동 · HTML 기반 광고 배너 제작(광고 문의)' },
+      { title: 'UX 개선', desc: '프로필 자기소개 편집 UI · 붐업/다운 하루 1회 중복 방지 · 상대방 프로필 이미지 품질 개선 · DM 목록 디자인 통일' },
+      { title: '법적 문서', desc: '개인정보처리방침 · 이용약관 8개 언어 지원 · 시행일 / 최종 수정일 언어별 표시' },
+    ]},
+    { month: '2026.05', cards: [
+      { title: '시(市) 단위 채팅방', desc: '시 안에 사는 유저에게 시 단위 채팅방 추가(총 3단계: 시·구·동) · 정보 정확도 향상' },
+      { title: '군(郡) 지역 지원', desc: '군·읍·면 체계 감지 · 농어촌 지역 채팅방 구조 분리(군/읍·면 2단계)' },
+      { title: '같은 언어 채팅방', desc: '같은 언어를 사용하는 이웃끼리 구·동 단위 별도 채팅방 생성 · 한국어 선택 시 한국어 전용 방 미생성(중복 방지)' },
+    ]},
+    { month: '2026.03', cards: [
+      { title: '1:1 채팅(DM)', desc: '그룹 채팅에서 상대 프로필 탭 → DM 시작 · 수신함 알림 · 읽지 않은 메시지 배지 · 상대방 나감 감지' },
+      { title: '프로필 시스템', desc: '닉네임 · 성별 · 국적 · 아바타 사진 · 자기소개 · 붐업/다운 평가 · 프로필 삭제 기능' },
+      { title: '다국어 지원', desc: '8개 언어 UI(한·영·중·일·스·불·힌·아) · 언어별 국기 선택 · 비속어 필터 다국어 적용' },
+    ]},
+    { month: '2026.01', cards: [
+      { title: 'Village Chat 출시', desc: '위치 기반 실시간 그룹 채팅 · Nominatim 역지오코딩으로 구·동 자동 감지 · 실시간 메시지 동기화' },
+    ]},
+  ],
+  zh: [
+    { month: '2026.06', cards: [
+      { title: '安全加固', desc: '匿名登录 · App Check (reCAPTCHA v3) · 更严格的 Firestore 规则 · 基于 UID 的 DM 访问控制' },
+      { title: '举报与管理系统', desc: '在用户资料页添加举报功能 · 刷屏检测与自动临时封禁 · 举报记录存储' },
+      { title: '广告与变现', desc: 'Google AdSense 接入 · 基于 HTML 的广告横幅（广告合作联系）' },
+      { title: 'UX 改进', desc: '个人简介编辑 UI · 每日投票去重 · 更好的头像质量 · 统一的私信列表设计' },
+      { title: '法律文件', desc: '隐私政策与服务条款支持 8 种语言 · 按语言显示生效日期/最后更新日期' },
+    ]},
+    { month: '2026.05', cards: [
+      { title: '市级聊天室', desc: '为同一城市用户新增市级聊天室（共 3 级：市·区·街道）· 提升位置精度' },
+      { title: '农村地区支持', desc: '检测县/镇/村层级 · 农村地区独立房间结构（2 级：县·镇）' },
+      { title: '同语言聊天室', desc: '为使用相同语言的邻居创建独立聊天室 · 选择韩语时不创建韩语专属房间（防止重复）' },
+    ]},
+    { month: '2026.03', cards: [
+      { title: '私信（DM）', desc: '在群聊中点击用户资料发起私信 · 收件箱通知 · 未读消息徽章 · 对方离开检测' },
+      { title: '个人资料系统', desc: '昵称 · 性别 · 国籍 · 头像 · 简介 · 点赞/踩评分 · 删除资料功能' },
+      { title: '多语言支持', desc: '8 种语言 UI（韩·英·中·日·西·法·印·阿） · 国旗语言选择 · 多语言脏话过滤' },
+    ]},
+    { month: '2026.01', cards: [
+      { title: 'Village Chat 上线', desc: '基于位置的实时群聊 · 通过 Nominatim 反向地理编码自动检测区/街道 · 实时消息同步' },
+    ]},
+  ],
+  ja: [
+    { month: '2026.06', cards: [
+      { title: 'セキュリティ強化', desc: '匿名ログイン導入 · App Check (reCAPTCHA v3) · Firestoreルール強化 · UIDベースのDMアクセス制御' },
+      { title: '通報・制裁システム', desc: 'プロフィールから通報機能追加 · スパム検出・自動一時制裁 · 通報記録保存' },
+      { title: '広告・マネタイズ', desc: 'Google AdSense連携 · HTMLベースの広告バナー作成（広告掲載のお問い合わせ）' },
+      { title: 'UX改善', desc: 'プロフィール自己紹介編集UI · 1日1回投票重複防止 · プロフィール画像品質向上 · DMリストデザイン統一' },
+      { title: '法的書類', desc: 'プライバシーポリシー・利用規約を8言語対応 · 言語別施行日/最終更新日表示' },
+    ]},
+    { month: '2026.05', cards: [
+      { title: '市レベルのチャットルーム', desc: '同じ市内のユーザーに市レベルのルームを追加（3段階：市・区・町） · 位置精度向上' },
+      { title: '郡エリアのサポート', desc: '郡・町・村の階層を検出 · 農村エリアの独立したルーム構造（2段階：郡・町）' },
+      { title: '同言語チャットルーム', desc: '同じ言語を使う近隣ユーザー向けの独立ルーム · 韓国語選択時は韓国語専用ルームを作成しない（重複防止）' },
+    ]},
+    { month: '2026.03', cards: [
+      { title: 'ダイレクトメッセージ（DM）', desc: 'グループチャットのプロフィールタップからDM開始 · 受信箱通知 · 未読バッジ · 相手退出検出' },
+      { title: 'プロフィールシステム', desc: 'ニックネーム・性別・国籍・アバター・自己紹介・評価・プロフィール削除' },
+      { title: '多言語サポート', desc: '8言語UI（韓・英・中・日・西・仏・印・阿） · 国旗で言語選択 · 多言語禁止語フィルター' },
+    ]},
+    { month: '2026.01', cards: [
+      { title: 'Village Chat リリース', desc: '位置情報ベースのリアルタイムグループチャット · Nominatimで区/町を自動検出 · リアルタイムメッセージ同期' },
+    ]},
+  ],
+  es: [
+    { month: '2026.06', cards: [
+      { title: 'Seguridad', desc: 'Login anónimo · App Check (reCAPTCHA v3) · Reglas de Firestore más estrictas · Control de acceso DM basado en UID' },
+      { title: 'Sistema de reportes', desc: 'Botón de reporte en perfiles · Detección de spam y baneo temporal automático · Almacenamiento de reportes' },
+      { title: 'Publicidad y monetización', desc: 'Integración con Google AdSense · Banners de anuncio en HTML (contacto publicitario)' },
+      { title: 'Mejoras de UX', desc: 'Edición de bio · Deduplicación de votos diarios · Mejor calidad de foto · Diseño unificado en lista de DMs' },
+      { title: 'Documentos legales', desc: 'Política de privacidad y términos en 8 idiomas · Fechas de vigencia/actualización por idioma' },
+    ]},
+    { month: '2026.05', cards: [
+      { title: 'Sala por ciudad', desc: 'Sala a nivel de ciudad para usuarios de la misma ciudad (3 niveles: ciudad · distrito · barrio) · Mayor precisión de ubicación' },
+      { title: 'Soporte rural', desc: 'Detección de jerarquía condado/pueblo/aldea · Estructura de sala separada para zonas rurales (2 niveles)' },
+      { title: 'Sala por idioma', desc: 'Salas separadas para vecinos con el mismo idioma · Sin sala exclusiva en coreano al seleccionar coreano (evita duplicados)' },
+    ]},
+    { month: '2026.03', cards: [
+      { title: 'Mensajes directos (DM)', desc: 'Iniciar DM desde perfil en chat grupal · Notificaciones · Insignia de no leídos · Detección de salida del partner' },
+      { title: 'Sistema de perfil', desc: 'Apodo · género · nacionalidad · avatar · bio · valoraciones · eliminación de perfil' },
+      { title: 'Soporte multiidioma', desc: 'UI en 8 idiomas (KO·EN·ZH·JA·ES·FR·HI·AR) · Selector de idioma con banderas · Filtro de palabrotas multiidioma' },
+    ]},
+    { month: '2026.01', cards: [
+      { title: 'Lanzamiento de Village Chat', desc: 'Chat grupal en tiempo real basado en ubicación · Detección automática vía Nominatim · Sincronización en tiempo real' },
+    ]},
+  ],
+  fr: [
+    { month: '2026.06', cards: [
+      { title: 'Sécurité', desc: 'Connexion anonyme · App Check (reCAPTCHA v3) · Règles Firestore renforcées · Contrôle d\'accès DM par UID' },
+      { title: 'Signalements & modération', desc: 'Bouton signalement sur les profils · Détection de spam & bannissement temporaire · Historique des signalements' },
+      { title: 'Publicité & monétisation', desc: 'Intégration Google AdSense · Bannières publicitaires HTML (contact publicitaire)' },
+      { title: 'Améliorations UX', desc: 'Édition de la bio · Déduplication des votes quotidiens · Meilleure qualité d\'avatar · Design unifié liste DM' },
+      { title: 'Documents légaux', desc: 'Politique de confidentialité & CGU en 8 langues · Dates d\'entrée en vigueur/mise à jour par langue' },
+    ]},
+    { month: '2026.05', cards: [
+      { title: 'Salon au niveau ville', desc: 'Salon de niveau ville pour les utilisateurs d\'une même ville (3 niveaux : ville · arrondissement · quartier) · Meilleure précision de localisation' },
+      { title: 'Support zones rurales', desc: 'Détection de la hiérarchie canton/commune/village · Structure de salon séparée pour les zones rurales (2 niveaux)' },
+      { title: 'Salon par langue', desc: 'Salons séparés pour les voisins partageant la même langue · Pas de salon coréen exclusif si coréen sélectionné (évite les doublons)' },
+    ]},
+    { month: '2026.03', cards: [
+      { title: 'Messages directs (DM)', desc: 'Démarrer un DM depuis le profil dans un groupe · Notifications boîte de réception · Badge non-lus · Détection départ partenaire' },
+      { title: 'Système de profil', desc: 'Pseudo · genre · nationalité · avatar · bio · évaluations · suppression de profil' },
+      { title: 'Support multilingue', desc: 'UI en 8 langues (KO·EN·ZH·JA·ES·FR·HI·AR) · Sélecteur de langue avec drapeaux · Filtre grossièretés multilingue' },
+    ]},
+    { month: '2026.01', cards: [
+      { title: 'Lancement de Village Chat', desc: 'Chat de groupe en temps réel basé sur la localisation · Détection automatique via Nominatim · Synchronisation en temps réel' },
+    ]},
+  ],
+  hi: [
+    { month: '2026.06', cards: [
+      { title: 'सुरक्षा सुधार', desc: 'अज्ञात लॉगिन · App Check (reCAPTCHA v3) · Firestore नियम सख्त · UID-आधारित DM एक्सेस' },
+      { title: 'रिपोर्ट व प्रतिबंध', desc: 'प्रोफ़ाइल पर रिपोर्ट बटन · स्पैम पहचान व अस्थायी प्रतिबंध · रिपोर्ट रिकॉर्ड' },
+      { title: 'विज्ञापन व मुद्रीकरण', desc: 'Google AdSense एकीकरण · HTML विज्ञापन बैनर (विज्ञापन संपर्क)' },
+      { title: 'UX सुधार', desc: 'बायो संपादन · दैनिक वोट डेडुप · बेहतर अवतार गुणवत्ता · DM सूची डिज़ाइन एकीकृत' },
+      { title: 'कानूनी दस्तावेज़', desc: 'गोपनीयता नीति व सेवा शर्तें 8 भाषाओं में · भाषा-वार तिथि प्रदर्शन' },
+    ]},
+    { month: '2026.05', cards: [
+      { title: 'शहर-स्तरीय चैट रूम', desc: 'एक ही शहर के उपयोगकर्ताओं के लिए शहर-स्तरीय कमरा (3 स्तर: शहर·जिला·मोहल्ला) · सटीक स्थान' },
+      { title: 'ग्रामीण क्षेत्र समर्थन', desc: 'ज़िला/तहसील/गाँव पदानुक्रम पहचान · ग्रामीण क्षेत्र के लिए अलग रूम संरचना' },
+      { title: 'समान भाषा चैट रूम', desc: 'एक ही भाषा बोलने वालों के लिए अलग चैट रूम · कोरियाई चुनने पर कोरियाई कमरा नहीं (डुप्लीकेट से बचें)' },
+    ]},
+    { month: '2026.03', cards: [
+      { title: 'डायरेक्ट मैसेजिंग (DM)', desc: 'ग्रुप चैट प्रोफ़ाइल से DM शुरू · इनबॉक्स नोटिफिकेशन · अपठित बैज · पार्टनर-बाहर पहचान' },
+      { title: 'प्रोफ़ाइल सिस्टम', desc: 'उपनाम · लिंग · राष्ट्रीयता · अवतार · बायो · रेटिंग · प्रोफ़ाइल हटाना' },
+      { title: 'बहुभाषी समर्थन', desc: '8 भाषाओं में UI · ध्वज से भाषा चयन · बहुभाषी अश्लील फ़िल्टर' },
+    ]},
+    { month: '2026.01', cards: [
+      { title: 'Village Chat लॉन्च', desc: 'स्थान-आधारित रीयल-टाइम ग्रुप चैट · Nominatim से स्वतः जिला/मोहल्ला पहचान · रीयल-टाइम संदेश सिंक' },
+    ]},
+  ],
+  ar: [
+    { month: '2026.06', cards: [
+      { title: 'تعزيز الأمان', desc: 'تسجيل دخول مجهول · App Check (reCAPTCHA v3) · قواعد Firestore أكثر صرامة · تحكم في وصول DM عبر UID' },
+      { title: 'نظام الإبلاغ والعقوبات', desc: 'زر إبلاغ في الملفات الشخصية · كشف السبام وحظر مؤقت تلقائي · تخزين سجلات الإبلاغ' },
+      { title: 'الإعلانات والتحقيق المالي', desc: 'تكامل Google AdSense · لافتات إعلانية HTML (التواصل للإعلان)' },
+      { title: 'تحسينات UX', desc: 'تحرير السيرة الذاتية · منع التصويت المكرر يومياً · جودة صورة أفضل · تصميم موحد لقائمة DM' },
+      { title: 'الوثائق القانونية', desc: 'سياسة الخصوصية وشروط الخدمة بـ 8 لغات · عرض تواريخ السريان/التحديث حسب اللغة' },
+    ]},
+    { month: '2026.05', cards: [
+      { title: 'غرفة على مستوى المدينة', desc: 'غرفة على مستوى المدينة لمستخدمي المدينة ذاتها (3 مستويات: مدينة · حي · حارة) · دقة موقع أفضل' },
+      { title: 'دعم المناطق الريفية', desc: 'كشف تسلسل المقاطعة/البلدة/القرية · هيكل غرف منفصل للمناطق الريفية' },
+      { title: 'غرفة نفس اللغة', desc: 'غرف منفصلة للجيران الذين يتحدثون اللغة ذاتها · لا تُنشأ غرفة كورية عند اختيار الكورية (منع التكرار)' },
+    ]},
+    { month: '2026.03', cards: [
+      { title: 'الرسائل المباشرة (DM)', desc: 'بدء DM من صفحة الملف الشخصي في الدردشة الجماعية · إشعارات صندوق الوارد · شارة الرسائل غير المقروءة · كشف مغادرة الشريك' },
+      { title: 'نظام الملف الشخصي', desc: 'الاسم المستعار · الجنس · الجنسية · الصورة الرمزية · السيرة الذاتية · التقييمات · حذف الملف الشخصي' },
+      { title: 'دعم متعدد اللغات', desc: 'واجهة بـ 8 لغات · اختيار اللغة بالعلم · فلتر شتائم متعدد اللغات' },
+    ]},
+    { month: '2026.01', cards: [
+      { title: 'إطلاق Village Chat', desc: 'دردشة جماعية فورية قائمة على الموقع · كشف تلقائي للحي عبر Nominatim · مزامنة رسائل فورية' },
+    ]},
+  ],
+};
+
+function renderDevlog() {
+  const lang = currentLang;
+  const data = DEVLOG_LOG[lang] || DEVLOG_LOG.en;
+  const titleEl = document.getElementById('devlogTitle');
+  const subEl = document.getElementById('devlogSub');
+  if (titleEl) titleEl.textContent = t('devlog_title') || '개발 로그';
+  if (subEl) subEl.textContent = t('devlog_sub') || 'Village Chat Development Log';
+  const container = document.getElementById('devlogCards');
+  if (!container) return;
+  const isLast = (i) => i === data.length - 1;
+  container.innerHTML = data.map((section, i) => `
+    <div style="margin-bottom:${isLast(i)?'8':'28'}px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="font-size:12px;font-weight:700;color:#fff;background:var(--blue);border-radius:20px;padding:3px 12px;white-space:nowrap">${section.month}</div>
+        <div style="flex:1;height:1px;background:var(--c-border)"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${section.cards.map(card => `
+          <div style="background:#f0faf4;border:1px solid #b8ddc8;border-radius:var(--radius-md);padding:12px 14px">
+            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">${card.title}</div>
+            <div style="font-size:13px;color:var(--c-text);line-height:1.6">${card.desc}</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
 function renderAbout() {
   const lang = currentLang;
   const c = ABOUT_CONTENT[lang] || ABOUT_CONTENT.en;
@@ -1493,29 +1609,50 @@ function renderAbout() {
     <div class="about-footer-row"><a href="#" onclick="event.preventDefault();showScreen('privacyScreen')">${c.privacy}</a> &nbsp;·&nbsp; <a href="#" onclick="event.preventDefault();showScreen('termsScreen')">${c.terms}</a></div>
     <div class="about-footer-row" style="margin-top:10px;font-size:11.5px">${c.copyright}</div>`;
 
-  // 메뉴 하단 copyright
+  // 메뉴 하단 contact + copyright
   const mc = document.getElementById('menuCopyright');
   if (mc) mc.textContent = c.copyright;
+  const ml = document.getElementById('menuContactLine');
+  if (ml) ml.innerHTML = `${t('contact_label') || 'Contact'}: <a href="mailto:contact@village-chat.com" style="color:var(--blue);text-decoration:none">contact@village-chat.com</a>`;
 }
 
-// 개발 문의 폼
+// legal 뒤로가기
+let legalBackTarget = 'aboutScreen';
+function goBackFromLegal() {
+  showScreen(legalBackTarget);
+  legalBackTarget = 'aboutScreen';
+}
+
+// 개발 의견 폼
 function toggleDevInquiry() {
   const f = document.getElementById('devInquiryForm');
   const isHidden = f.style.display === 'none';
   f.style.display = isHidden ? 'block' : 'none';
   if (isHidden) {
-    document.getElementById('devInquiryText').focus();
-    document.getElementById('devInquiryText').oninput = function() {
+    const ta = document.getElementById('devInquiryText');
+    ta.placeholder = t('dev_opinion_placeholder') || 'Village Chat을 더 좋게 만들 아이디어나 의견이 있다면 자유롭게 적어주세요 :)';
+    ta.focus();
+    ta.oninput = function() {
       document.getElementById('devInquiryCounter').textContent = this.value.length + ' / 500';
     };
   }
 }
+
+document.addEventListener('click', function(e) {
+  const form = document.getElementById('devInquiryForm');
+  const btn = document.getElementById('devOpinionBtn');
+  if (form && form.style.display !== 'none') {
+    if (!form.contains(e.target) && e.target !== btn && !btn?.contains(e.target)) {
+      form.style.display = 'none';
+    }
+  }
+});
 async function submitDevInquiry() {
   const text = document.getElementById('devInquiryText').value.trim();
-  if (!text) { alert('내용을 입력해주세요.'); return; }
+  if (!text) { alert(t('dev_opinion_placeholder') || '내용을 입력해주세요.'); return; }
   if (window._firebaseReady) {
     window._addDoc(window._collection(window._db, 'inquiries'), {
-      type: 'dev',
+      type: 'dev_opinion',
       text,
       nickname: profile?.nickname || '',
       ts: new Date(),
@@ -1524,7 +1661,7 @@ async function submitDevInquiry() {
   document.getElementById('devInquiryForm').style.display = 'none';
   document.getElementById('devInquiryText').value = '';
   document.getElementById('devInquiryCounter').textContent = '0 / 500';
-  alert('문의가 접수됐습니다. 검토 후 연락드릴게요 :)');
+  alert(t('dev_opinion_submitted') || '의견이 접수됐습니다. 감사합니다 :)');
 }
 
 function legalDateStr(lang, effectiveDate, updatedDate) {
@@ -1657,7 +1794,7 @@ function renderPrivacy() {
       <p>${isEn ? 'If you have any questions about this Privacy Policy, please contact:' : '개인정보 관련 문의사항은 아래로 연락해 주세요.'}</p>
       <p><strong>Village Chat</strong><br>
       ${isEn ? 'Privacy Officer' : '개인정보 보호책임자'}: Seongmin Choi<br>
-      Email: <a href="mailto:contact@village-chat.com">contact@village-chat.com</a></p>
+      Contact: <a href="mailto:contact@village-chat.com">contact@village-chat.com</a></p>
     </div>`;
 }
 
@@ -1747,7 +1884,7 @@ function renderTerms() {
       <div class="legal-section-title">${isEn ? '10. Contact' : '10. 문의'}</div>
       <p>${isEn ? 'If you have any questions about these Terms, please contact:' : '약관 관련 문의는 아래로 연락해 주세요.'}</p>
       <p><strong>Village Chat</strong><br>
-      Email: <a href="mailto:contact@village-chat.com">contact@village-chat.com</a></p>
+      Contact: <a href="mailto:contact@village-chat.com">contact@village-chat.com</a></p>
     </div>`;
 }
 
@@ -1906,8 +2043,10 @@ function setLang(code) {
         : dd + t('room_suffix');
     }
   }
-  // about 화면 열려있으면 재렌더
-  if (document.getElementById('aboutScreen')?.classList.contains('active')) renderAbout();
+  // 메뉴 하단 항상 업데이트
+  renderAbout();
+  // devlog 화면 열려있으면 재렌더
+  if (document.getElementById('devlogScreen')?.classList.contains('active')) renderDevlog();
 }
 
 function t(key) { return (STRINGS[currentLang] || STRINGS.en)[key] || (STRINGS.en[key] || key); }
@@ -2034,7 +2173,8 @@ const SCREEN_PATHS = {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'aboutScreen') renderAbout();
+  if (id === 'aboutScreen' || id === 'devlogScreen') renderAbout();
+  if (id === 'devlogScreen') renderDevlog();
   if (id === 'privacyScreen') renderPrivacy();
   if (id === 'termsScreen') renderTerms();
   if (typeof gtag !== 'undefined') {
