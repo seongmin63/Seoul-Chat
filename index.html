@@ -480,6 +480,24 @@ body {
 <!-- ⓪ 인트로 화면 -->
 <div id="introScreen" class="screen active">
   <canvas id="introCanvas"></canvas>
+  <div style="position:absolute;right:16px;top:50%;transform:translateY(-50%);z-index:3;text-align:right;pointer-events:none">
+    <div style="font-size:10px;color:rgba(255,255,255,0.45);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Available in</div>
+    <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:12px;color:rgba(255,255,255,0.75)">South Korea</span>
+        <img src="https://flagcdn.com/kr.svg" alt="" style="width:20px;height:14px;object-fit:cover;border-radius:2px;opacity:0.8">
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+        <span style="font-size:11px;color:rgba(255,255,255,0.35)">United States</span>
+        <img src="https://flagcdn.com/us.svg" alt="" style="width:20px;height:14px;object-fit:cover;border-radius:2px;opacity:0.3">
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:11px;color:rgba(255,255,255,0.35)">Japan</span>
+        <img src="https://flagcdn.com/jp.svg" alt="" style="width:20px;height:14px;object-fit:cover;border-radius:2px;opacity:0.3">
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.28);margin-top:2px;font-style:italic">coming soon</div>
+    </div>
+  </div>
   <div class="intro-content">
     <svg class="intro-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="50" fill="#00704A"/>
