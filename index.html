@@ -254,6 +254,12 @@ body {
 #adTrack { display: flex; height: 80px; transition: transform .6s cubic-bezier(.4,0,.2,1); }
 .ad-slide { flex: 0 0 auto; cursor: pointer; background: #e8f5ed; }
 .ad-slide img { height: 80px; width: 100%; object-fit: cover; object-position: center; display: block; }
+@media (max-width: 400px) {
+  .ad-slide-title { font-size: 13px !important; }
+  .ad-slide-sub { font-size: 10px !important; }
+  .ad-slide-label { font-size: 9px !important; letter-spacing: 1.5px !important; }
+  .ad-slide-link { font-size: 11px !important; }
+}
 @media (min-width: 600px) {
   #adBanner { height: auto; }
   #adTrack { height: auto; }
@@ -546,6 +552,10 @@ body {
 <div id="profileScreen" class="screen">
   <div class="profile-card">
     <div>
+      <button onclick="showScreen('introScreen')" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;color:var(--c-muted);font-size:13px;padding:0;margin-bottom:10px;font-family:inherit" data-i18n-title="back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span data-i18n="back">뒤로</span>
+      </button>
       <h2 data-i18n="profile_title">Village Chat 시작하기</h2>
       <p class="desc" style="margin-top:4px" data-i18n="profile_desc">내 동네 이웃들과 자유롭게 대화해요.<br>프로필을 설정하면 위치 기반으로 자동 입장돼요.</p>
     </div>
@@ -708,16 +718,24 @@ body {
   </div>
   <div id="adBanner" style="display:none">
     <div id="adTrack">
-      <div class="ad-slide" onclick="window.open('https://oeeo.store/','_blank','noopener')">
-        <img src="ad_oeeo.png" alt="oeeo strawberry">
+      <div class="ad-slide" onclick="window.open('https://oeeo.store/','_blank','noopener')" style="display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:linear-gradient(135deg,#fce8f0 0%,#f5d5e8 50%,#ecdff5 100%);height:80px;width:100%;gap:16px;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:12px;min-width:0">
+          <div style="font-size:28px;line-height:1">🍓</div>
+          <div style="min-width:0">
+            <div class="ad-slide-label" style="font-size:10px;font-weight:700;letter-spacing:3px;color:rgba(180,80,120,0.6);text-transform:uppercase;margin-bottom:2px">Advertisement</div>
+            <div class="ad-slide-title" style="font-size:16px;font-weight:900;color:#7a3a5a;letter-spacing:-0.5px;line-height:1.15">귀여움이 세상을 구한다</div>
+            <div class="ad-slide-sub" style="font-size:11px;color:#b06a8a;margin-top:2px;font-weight:500">Make me feel berry 🍓 &nbsp;·&nbsp; 감각적인 우양산 브랜드</div>
+          </div>
+        </div>
+        <div class="ad-slide-link" style="font-size:12px;font-weight:700;color:#c07090;letter-spacing:0.5px;flex-shrink:0">oeeo.store ›</div>
       </div>
       <div class="ad-slide" id="adContactSlide" style="display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:linear-gradient(135deg,#004f35 0%,#00704A 60%,#00916a 100%);height:80px;width:100%;gap:16px">
         <div style="display:flex;align-items:center;gap:14px;min-width:0">
           <div style="width:2px;height:40px;background:rgba(255,255,255,0.35);border-radius:2px;flex-shrink:0"></div>
           <div style="min-width:0">
-            <div style="font-size:10px;font-weight:600;letter-spacing:2px;color:rgba(255,255,255,0.55);text-transform:uppercase;margin-bottom:3px">Advertisement</div>
-            <div style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-0.3px;line-height:1.1">Partner with Us</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;font-weight:400">광고 문의</div>
+            <div class="ad-slide-label" style="font-size:10px;font-weight:600;letter-spacing:2px;color:rgba(255,255,255,0.55);text-transform:uppercase;margin-bottom:3px">Advertisement</div>
+            <div class="ad-slide-title" style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-0.3px;line-height:1.1">Partner with Us</div>
+            <div class="ad-slide-sub" style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;font-weight:400">광고 문의</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
@@ -793,6 +811,14 @@ body {
     <div class="modal-name" id="partnerName"></div>
     <div class="partner-bio" id="partnerBio"></div>
     <button class="btn-modal" id="partnerDmBtn" onclick="startDM()">1:1 채팅</button>
+    <button onclick="toggleReportForm()" style="background:none;border:none;color:var(--c-muted);font-size:12px;cursor:pointer;padding:2px 0;font-family:inherit;text-decoration:underline" data-i18n="report_btn">신고하기</button>
+    <div id="reportForm" style="display:none;width:100%;margin-top:4px">
+      <textarea id="reportReason" maxlength="200" placeholder="신고 사유를 입력해주세요" style="width:100%;padding:10px 12px;border:1px solid var(--c-border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;resize:none;height:80px;background:var(--c-input);color:var(--c-text)"></textarea>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:6px">
+        <button onclick="toggleReportForm()" style="padding:7px 14px;border:1px solid var(--c-border);border-radius:var(--radius-sm);background:none;font-size:13px;cursor:pointer;font-family:inherit;color:var(--c-text)" data-i18n="close_btn">취소</button>
+        <button onclick="submitReport()" style="padding:7px 14px;border:none;border-radius:var(--radius-sm);background:#e53935;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit" data-i18n="report_submit">신고 제출</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1157,6 +1183,21 @@ const STRINGS = {
     fr:{ loc_finding:'Vérification de la localisation...', delete_profile:'Supprimer le profil', close_btn:'Fermer', nick_taken:'Ce pseudo est déjà utilisé. Veuillez en choisir un autre.', menu_si_sub:'Discutez avec les voisins de toute la ville', menu_lang_gu_sub:'Même langue · chat de quartier', menu_lang_dong_sub:'Même langue · chat de voisinage' },
     hi:{ loc_finding:'स्थान जांच रहे हैं...', delete_profile:'प्रोफ़ाइल हटाएं', close_btn:'बंद करें', nick_taken:'यह उपनाम पहले से उपयोग में है। कृपया कोई अन्य उपनाम चुनें।', menu_si_sub:'पूरे शहर के पड़ोसियों से चैट करें', menu_lang_gu_sub:'समान भाषा · जिला चैट', menu_lang_dong_sub:'समान भाषा · पड़ोस चैट' },
     ar:{ loc_finding:'جارٍ التحقق من الموقع...', delete_profile:'حذف الملف الشخصي', close_btn:'إغلاق', nick_taken:'هذا الاسم المستعار مستخدم بالفعل. يرجى اختيار اسم آخر.', menu_si_sub:'تحدث مع جيران المدينة بأكملها', menu_lang_gu_sub:'نفس اللغة · دردشة المنطقة', menu_lang_dong_sub:'نفس اللغة · دردشة الحي' },
+  }[l];
+  if (STRINGS[l] && x) Object.assign(STRINGS[l], x);
+});
+
+// report + back
+['en','ko','zh','ja','es','fr','hi','ar'].forEach(l => {
+  const x = {
+    en:{ report_btn:'Report', report_submit:'Submit Report', back:'Back' },
+    ko:{ report_btn:'신고하기', report_submit:'신고 제출', back:'뒤로' },
+    zh:{ report_btn:'举报', report_submit:'提交举报', back:'返回' },
+    ja:{ report_btn:'通報する', report_submit:'通報を送信', back:'戻る' },
+    es:{ report_btn:'Denunciar', report_submit:'Enviar denuncia', back:'Volver' },
+    fr:{ report_btn:'Signaler', report_submit:'Envoyer le signalement', back:'Retour' },
+    hi:{ report_btn:'रिपोर्ट करें', report_submit:'रिपोर्ट सबमिट करें', back:'वापस' },
+    ar:{ report_btn:'إبلاغ', report_submit:'إرسال البلاغ', back:'رجوع' },
   }[l];
   if (STRINGS[l] && x) Object.assign(STRINGS[l], x);
 });
@@ -1749,11 +1790,11 @@ document.getElementById('avatarChangeInput').addEventListener('change', e => {
     const tempImg = new Image();
     tempImg.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = 80; canvas.height = 80;
+      canvas.width = 300; canvas.height = 300;
       const ctx = canvas.getContext('2d');
       const size = Math.min(tempImg.width, tempImg.height);
-      ctx.drawImage(tempImg, (tempImg.width-size)/2, (tempImg.height-size)/2, size, size, 0, 0, 80, 80);
-      const compressed = canvas.toDataURL('image/jpeg', 0.7);
+      ctx.drawImage(tempImg, (tempImg.width-size)/2, (tempImg.height-size)/2, size, size, 0, 0, 300, 300);
+      const compressed = canvas.toDataURL('image/jpeg', 0.85);
 
       profile.avatar = compressed;
       localStorage.setItem('dnTalk_profile', JSON.stringify(profile));
@@ -1781,11 +1822,11 @@ function compressAndSetAvatar(file) {
     const tempImg = new Image();
     tempImg.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = 80; canvas.height = 80;
+      canvas.width = 300; canvas.height = 300;
       const ctx = canvas.getContext('2d');
       const size = Math.min(tempImg.width, tempImg.height);
-      ctx.drawImage(tempImg, (tempImg.width-size)/2, (tempImg.height-size)/2, size, size, 0, 0, 80, 80);
-      const compressed = canvas.toDataURL('image/jpeg', 0.7);
+      ctx.drawImage(tempImg, (tempImg.width-size)/2, (tempImg.height-size)/2, size, size, 0, 0, 300, 300);
+      const compressed = canvas.toDataURL('image/jpeg', 0.85);
       document.getElementById('avatarEmoji').style.display = 'none';
       let img = document.getElementById('avatarPreview').querySelector('img');
       if (!img) { img = document.createElement('img'); document.getElementById('avatarPreview').appendChild(img); }
@@ -2414,6 +2455,11 @@ function subscribeInbox() {
       saveDmToList({ id: d.dmId, partnerNick: d.partnerNick, partnerAvatar: d.partnerAvatar, partnerGender: d.partnerGender, partnerNationality: d.partnerNationality || '' });
       if (wasLocked) clearLeftMark(d.dmId);
       registerDmParticipant(d.dmId);
+      if (currentRoom?.id !== d.dmId) {
+        addDmUnread(d.dmId);
+        updateDmBadge();
+        showDmToast(d.partnerNick, d.dmId, '');
+      }
       subscribeDmRooms();
     });
   });
@@ -2513,7 +2559,7 @@ function updateDmBadge() {
 
 function showDmToast(fromNick, dmId, msgText) {
   toastDmId = dmId;
-  const preview = msgText ? msgText.slice(0, 28) + (msgText.length > 28 ? '…' : '') : '';
+  const preview = msgText ? msgText.slice(0, 28) + (msgText.length > 28 ? '…' : '') : (t('dm_new_msg') || '새 메시지');
   document.getElementById('dmToastText').textContent = fromNick + ': ' + preview;
   const toast = document.getElementById('dmToast');
   toast.classList.add('show');
@@ -2895,6 +2941,37 @@ async function voteBoom(type) {
 function closePartnerModal(e) {
   if (e && e.target !== document.getElementById('partnerModal')) return;
   document.getElementById('partnerModal').classList.remove('open');
+  document.getElementById('reportForm').style.display = 'none';
+  document.getElementById('reportReason').value = '';
+}
+function toggleReportForm() {
+  const f = document.getElementById('reportForm');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+  if (f.style.display === 'block') document.getElementById('reportReason').focus();
+}
+async function submitReport() {
+  const reason = document.getElementById('reportReason').value.trim();
+  if (!reason) { alert(currentLang === 'ko' ? '신고 사유를 입력해주세요.' : 'Please enter a reason.'); return; }
+  if (!modalTarget) return;
+  const now = new Date();
+  const reportData = {
+    reporter: profile.nickname,
+    reported: modalTarget.nick,
+    reason,
+    room: currentRoom?.id || '',
+    ts: now,
+  };
+  if (window._firebaseReady) {
+    window._addDoc(window._collection(window._db, 'reports'), reportData).catch(() => {});
+  }
+  const subject = encodeURIComponent(`[신고] ${modalTarget.nick} 신고`);
+  const body = encodeURIComponent(
+    `신고자: ${profile.nickname}\n신고 대상: ${modalTarget.nick}\n일시: ${now.toLocaleString('ko-KR')}\n채팅방: ${currentRoom?.id || '-'}\n\n사유:\n${reason}`
+  );
+  window.open(`mailto:contact@village-chat.com?subject=${subject}&body=${body}`, '_blank');
+  document.getElementById('reportForm').style.display = 'none';
+  document.getElementById('reportReason').value = '';
+  alert(currentLang === 'ko' ? '신고가 접수되었습니다.' : 'Report submitted.');
 }
 function startDM() {
   if (!modalTarget) return;
